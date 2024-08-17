@@ -114,7 +114,13 @@ const nextConfig = {
         ".jsonc",
       ],
     },
+
+    // react compiler
+    reactCompiler: true,
   },
+
+  // server external packages
+  serverExternalPackages: ["@node-rs/argon2"],
 
   // headers
   async headers() {
@@ -159,8 +165,6 @@ const nextConfig = {
       fullUrl: true,
     },
   },
-
-  serverExternalPackages: ["@node-rs/argon2"],
 }
 
 export default withBundleAnalyzerConfig(nextConfig)

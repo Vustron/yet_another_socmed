@@ -12,14 +12,13 @@
     "fmt:fix": "bun run lint && bun run format && bun run typecheck",
     "check-dep": "bunx upgradeps -v",
     "prod-test": "turbo build && turbo start",
-    "db-generate": "bunx prisma generate",
+    "db-generate": "bunx prisma generate --schema ./src/prisma/schema.prisma",
     "db-push": "bunx prisma db push --schema ./src/prisma/schema.prisma"
   },
   "dependencies": {
     "@hookform/resolvers": "3.9.0",
     "@lucia-auth/adapter-prisma": "^4.0.1",
     "@prisma/client": "^5.18.0",
-    "@prisma/extension-accelerate": "^1.1.0",
     "@radix-ui/react-alert-dialog": "1.1.1",
     "@radix-ui/react-avatar": "1.1.0",
     "@radix-ui/react-checkbox": "1.1.1",
@@ -40,10 +39,12 @@
     "@tiptap/react": "^2.4.0",
     "@tiptap/starter-kit": "^2.4.0",
     "@uploadthing/react": "^6.7.2",
+    "babel-plugin-react-compiler": "^0.0.0-experimental-52d6685-20240815",
     "class-variance-authority": "0.7.0",
     "clsx": "2.1.1",
     "cmdk": "1.0.0",
     "date-fns": "^3.6.0",
+    "dompurify": "^3.1.6",
     "dotenv": "16.4.5",
     "framer-motion": "11.3.28",
     "goober": "2.1.14",
@@ -52,12 +53,13 @@
     "ky": "^1.4.0",
     "lucia": "^3.2.0",
     "lucide-react": "0.428.0",
-    "next": "14.2.5",
+    "next": "15.0.0-rc.0",
+    "next-nprogress-bar": "^2.3.13",
     "next-themes": "^0.3.0",
     "prisma": "^5.16.1",
-    "react": "18.3.1",
+    "react": "19.0.0-rc-f994737d14-20240522",
     "react-cropper": "^2.3.3",
-    "react-dom": "18.3.1",
+    "react-dom": "19.0.0-rc-f994737d14-20240522",
     "react-hook-form": "7.52.2",
     "react-hot-toast": "2.4.1",
     "react-image-file-resizer": "^0.4.8",
@@ -73,6 +75,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
     "@next/bundle-analyzer": "14.2.5",
+    "@types/dompurify": "^3.0.5",
     "@types/node": "22.4.0",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
@@ -86,5 +89,10 @@
     "upgradeps": "2.0.6"
   },
   "packageManager": "bun@1.1.24",
-  "trustedDependencies": ["@biomejs/biome"]
+  "trustedDependencies": [
+    "@biomejs/biome",
+    "@prisma/client",
+    "@prisma/engines",
+    "prisma"
+  ]
 }

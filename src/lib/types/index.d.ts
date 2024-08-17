@@ -51,8 +51,9 @@ interface DynamicFormProps<TFieldValues extends FieldValues> {
   onSubmit: SubmitHandler<TFieldValues>
   fields: FieldConfig<TFieldValues>[]
   submitButtonTitle: string
-  mutation: Mutation
+  mutation?: Mutation
   className?: string
+  disabled?: boolean
 }
 
 /* Unique Id Type */
