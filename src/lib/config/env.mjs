@@ -12,7 +12,7 @@ export const env = createEnv({
   },
   // server env
   server: {
-    // TODO: server variables
+    DATABASE_URL: z.string().url(),
   },
   // client env
   client: {
@@ -21,6 +21,7 @@ export const env = createEnv({
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+    DATABASE_URL: process.env.DATABASE_URL,
   },
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
   /**

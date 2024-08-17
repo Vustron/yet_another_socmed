@@ -57,3 +57,12 @@ interface DynamicFormProps<TFieldValues extends FieldValues> {
 
 /* Unique Id Type */
 export type UniqueId = string
+
+/* DatabaseUserAttributes Type */
+export interface DatabaseUserAttributes {
+  id: string
+  username: string
+  displayName: string
+  avatarUrl: string | null
+  googleId: string | null
+}

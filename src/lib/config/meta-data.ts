@@ -15,7 +15,10 @@ export const getBaseUrl = () => {
 export const siteConfig: SiteConfig = {
   meta: {
     metadataBase: new URL(getBaseUrl()),
-    title: "Yet Another SocMed",
+    title: {
+      template: "%s | Yet Another SocMed",
+      default: "Yet Another SocMed",
+    },
     applicationName: "Yet Another SocMed",
     description: "A social media application made by Vustron",
     openGraph: { images: ["/og"] },

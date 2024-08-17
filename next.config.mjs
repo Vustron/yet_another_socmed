@@ -88,7 +88,7 @@ const nextConfig = {
   experimental: {
     // caching
     staleTimes: {
-      dynamic: 0,
+      dynamic: 30,
     },
 
     // turbo configs
@@ -159,6 +159,8 @@ const nextConfig = {
       fullUrl: true,
     },
   },
+
+  serverExternalPackages: ["@node-rs/argon2"],
 }
 
 export default withBundleAnalyzerConfig(nextConfig)
