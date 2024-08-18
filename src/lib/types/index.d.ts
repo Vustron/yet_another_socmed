@@ -73,8 +73,20 @@ export interface DatabaseUserAttributes {
   googleId: string | null
 }
 
-/* DatabaseUserAttributes Type */
+/* SessionContextProps Type */
 export interface SessionContextProps {
   user: User
   session: Session
+}
+
+/* UserButtonProps Type */
+export interface UserButtonProps {
+  className?: string
+}
+
+/* UserAvatarProps Type */
+export interface UserAvatarProps {
+  avatarUrl: string | null | undefined
+  size?: number
+  className?: string
 }

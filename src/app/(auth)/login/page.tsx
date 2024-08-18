@@ -22,7 +22,7 @@ export default function LoginPage() {
       <div className="flex h-full max-h-[40rem] w-full max-w-[64rem] overflow-hidden rounded-2xl bg-card shadow-2xl">
         <div className="w-full space-y-10 overflow-y-auto p-10 md:w-1/2">
           <h1 className="text-center text-2xl font-bold">
-            Login to Yet Another SocMed
+            Login to <span className="text-primary">Yeas</span>
           </h1>
           <div className="space-y-5">
             {/* <GoogleSignInButton /> */}
@@ -35,7 +35,11 @@ export default function LoginPage() {
 
             <LoginForm />
 
-            <Link href="/sign-up" className="block text-center hover:underline">
+            <Link
+              href="/sign-up"
+              className="block text-center hover:underline"
+              prefetch={false}
+            >
               Don&apos;t have an account? Sign up
             </Link>
           </div>

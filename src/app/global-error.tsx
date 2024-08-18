@@ -1,9 +1,11 @@
 "use client"
 
+// hooks
+import { useEffect } from "react"
+
 // utils
 import { ErrorHandler } from "@/lib/utils"
 import Link from "next/link"
-import { useEffect } from "react"
 
 // types
 import type { ErrorResponseData } from "@/lib/types"
@@ -33,7 +35,7 @@ export default function GlobalError({
             {error.message}
           </p>
 
-          <Link href="/">
+          <Link href="/" prefetch={false}>
             <p className="mt-[50px] font-md hover:text-slate-700 animate-pulse text-center text-xl">
               Go back
             </p>

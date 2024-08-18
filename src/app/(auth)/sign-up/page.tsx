@@ -23,7 +23,7 @@ export default function SignUpPage() {
         <div className="w-full space-y-10 overflow-y-auto p-10 md:w-1/2">
           <div className="space-y-1 text-center">
             <h1 className="text-2xl font-bold">
-              Sign up to Yet Another SocMed
+              Sign up to <span className="text-primary">Yeas</span>
             </h1>
             <p className="text-muted-foreground">
               A place where even <span className="italic">you</span> can find a
@@ -33,7 +33,11 @@ export default function SignUpPage() {
 
           <div className="space-y-5">
             <SignupForm />
-            <Link href="/login" className="block text-center hover:underline">
+            <Link
+              href="/login"
+              className="block text-center hover:underline"
+              prefetch={false}
+            >
               Already have an account? Log in
             </Link>
           </div>

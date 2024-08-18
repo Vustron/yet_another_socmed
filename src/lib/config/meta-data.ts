@@ -22,7 +22,7 @@ export const siteConfig: SiteConfig = {
     applicationName: "Yet Another SocMed",
     description: "A social media application made by Vustron",
     openGraph: { images: ["/og"] },
-    icons: [{ rel: "icon", url: "/icons/icon.ico" }],
+    icons: [{ rel: "icon", url: "/icons/favicon.ico" }],
   },
   viewport: {
     themeColor: [
