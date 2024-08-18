@@ -26,12 +26,15 @@ export default function LoginPage() {
           </h1>
           <div className="space-y-5">
             {/* <GoogleSignInButton /> */}
+
             <div className="flex items-center gap-3">
               <div className="h-px flex-1 bg-muted" />
               <span>OR</span>
               <div className="h-px flex-1 bg-muted" />
             </div>
+
             <LoginForm />
+
             <Link href="/sign-up" className="block text-center hover:underline">
               Don&apos;t have an account? Sign up
             </Link>

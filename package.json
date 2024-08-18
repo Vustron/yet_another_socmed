@@ -12,8 +12,9 @@
     "fmt:fix": "bun run lint && bun run format && bun run typecheck",
     "check-dep": "bunx upgradeps -v",
     "prod-test": "turbo build && turbo start",
-    "db-generate": "bunx prisma generate --schema ./src/prisma/schema.prisma",
-    "db-push": "bunx prisma db push --schema ./src/prisma/schema.prisma"
+    "generate": "bunx prisma generate --schema ./src/prisma/schema.prisma",
+    "push": "bunx prisma db push --schema ./src/prisma/schema.prisma",
+    "studio": "bunx prisma studio --schema ./src/prisma/schema.prisma"
   },
   "dependencies": {
     "@hookform/resolvers": "3.9.0",
