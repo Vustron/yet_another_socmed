@@ -14,7 +14,8 @@
     "prod-test": "turbo build && turbo start",
     "generate": "bunx prisma generate --schema ./src/prisma/schema.prisma",
     "push": "bunx prisma db push --schema ./src/prisma/schema.prisma",
-    "studio": "bunx prisma studio --schema ./src/prisma/schema.prisma"
+    "studio": "bunx prisma studio --schema ./src/prisma/schema.prisma",
+    "migrate": "bunx prisma migrate dev --schema ./src/prisma/schema.prisma"
   },
   "dependencies": {
     "@hookform/resolvers": "3.9.0",
