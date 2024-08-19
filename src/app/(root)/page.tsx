@@ -1,13 +1,9 @@
 "use client"
 
-import { useSession } from "@/components/providers/session"
-
 export default function RootPage() {
-  const { user } = useSession()
   return (
-    <main>
-      {user.username}
-      <br /> FrontPage
+    <main className="h-[200vh] w-full bg-red-50">
+      <div className="w-full">front</div>
     </main>
   )
 }

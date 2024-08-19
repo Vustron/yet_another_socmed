@@ -90,3 +90,8 @@ export interface UserAvatarProps {
   size?: number
   className?: string
 }
+
+/* MenuBarProps Type */
+export interface MenuBarProps {
+  className?: string
+}
