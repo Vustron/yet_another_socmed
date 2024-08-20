@@ -1,5 +1,5 @@
 // components
-import LoginForm from "@/app/(auth)/login/login-form"
+import LoginForm from "@/app/(auth)/login/_components/login-form"
 
 // utils
 import Image from "next/image"

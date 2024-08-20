@@ -1,5 +1,5 @@
 // components
-import SignupForm from "@/app/(auth)/sign-up/signup-form"
+import SignupForm from "@/app/(auth)/sign-up/_components/signup-form"
 
 // utils
 import Image from "next/image"

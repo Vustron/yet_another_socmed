@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import toast from "react-hot-toast"
 
 // hooks
-import { useLoginAccount } from "@/app/(auth)/api"
+import { useLoginAccount } from "@/app/(auth)/login/api"
 import { useForm } from "react-hook-form"
 
 // types

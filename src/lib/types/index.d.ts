@@ -1,5 +1,7 @@
 // types
 import type { IncomingMessage } from "node:http"
+import type { PostData } from "@/lib/constants"
+import type { Post, Prisma } from "@prisma/client"
 import type { Session, User } from "lucia"
 import type { Metadata, Viewport } from "next"
 import type {
@@ -36,6 +38,8 @@ export type SiteConfig = {
   viewport: Viewport
 }
 
+/* --------------Components Types---------------- */
+
 /* FieldConfig Type */
 interface FieldConfig<TFieldValues> {
   name: Path<TFieldValues>
@@ -61,6 +65,30 @@ interface DynamicFormProps<TFieldValues extends FieldValues> {
   disabled?: boolean
 }
 
+/* UserButtonProps Type */
+export interface UserButtonProps {
+  className?: string
+}
+
+/* UserAvatarProps Type */
+export interface UserAvatarProps {
+  avatarUrl: string | null | undefined
+  size?: number
+  className?: string
+}
+
+/* MenuBarProps Type */
+export interface MenuBarProps {
+  className?: string
+}
+
+/* PostsProps Type */
+export interface PostsProps {
+  post: Post
+}
+
+/* --------------Auth Types---------------- */
+
 /* Unique Id Type */
 export type UniqueId = string
 
@@ -79,19 +107,7 @@ export interface SessionContextProps {
   session: Session
 }
 
-/* UserButtonProps Type */
-export interface UserButtonProps {
-  className?: string
-}
-
-/* UserAvatarProps Type */
-export interface UserAvatarProps {
-  avatarUrl: string | null | undefined
-  size?: number
-  className?: string
-}
-
-/* MenuBarProps Type */
-export interface MenuBarProps {
-  className?: string
+/* postDataInclude Type */
+export interface PostsProps {
+  post: PostData
 }

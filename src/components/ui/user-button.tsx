@@ -21,7 +21,7 @@ import { useSession } from "@/components/providers/session"
 import { useTheme } from "next-themes"
 
 // actions
-import { logout } from "@/app/(auth)/actions"
+import { logout } from "@/app/(auth)/sign-up/actions"
 
 // utils
 import { clientErrorHandler, cn } from "@/lib/utils"

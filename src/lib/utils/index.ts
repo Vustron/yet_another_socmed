@@ -1,5 +1,6 @@
 // utils
 import { clsx } from "clsx"
+import { formatDate, formatDistanceToNowStrict } from "date-fns"
 import { NextResponse } from "next/server"
 import toast from "react-hot-toast"
 import { twMerge } from "tailwind-merge"
@@ -11,6 +12,21 @@ import type { ClassValue } from "clsx"
 import type DOMPurify from "dompurify"
 import type { NextRequest } from "next/server"
 import type { z } from "zod"
+
+export function formatRelativeDate(from: Date) {
+  // init current date
+  const currentDate = new Date()
+
+  if (currentDate.getTime() - from.getTime() < 24 * 60 * 60 * 1000) {
+    return formatDistanceToNowStrict(from, { addSuffix: true })
+  }
+
+  if (currentDate.getFullYear() === from.getFullYear()) {
+    return formatDate(from, "MMM d")
+  }
+
+  return formatDate(from, "MMM d, yyy")
+}
 
 // Unique Id generator
 export function createUniqueId(

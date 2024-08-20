@@ -7,17 +7,19 @@ import UserAvatar from "@/components/ui/user-avatar"
 // hooks
 import { useCreatePost } from "@/app/(root)/api"
 import { useSession } from "@/components/providers/session"
-import { EditorContent, useEditor } from "@tiptap/react"
+import { useEditor } from "@tiptap/react"
+
+// validation
+import { createPostSchema } from "@/lib/validation"
 
 // utils
 import { clientErrorHandler } from "@/lib/utils"
 import Placeholder from "@tiptap/extension-placeholder"
+import { EditorContent } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
 import toast from "react-hot-toast"
 import "@/lib/styles/editor.css"
-import { submitPost } from "../actions"
-
-// TODO: fix error cannot post
+import { z } from "zod"
 
 const PostEditor = () => {
   // get session
@@ -28,6 +30,7 @@ const PostEditor = () => {
 
   // init editor
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit.configure({
         bold: false,
@@ -40,18 +43,27 @@ const PostEditor = () => {
   })
 
   // get post content
-  const input = editor?.getText({ blockSeparator: "\n" }) || ""
+  const input = editor?.getText({ blockSeparator: "\n" }).trim() || ""
 
   // submit handler
   const submitHandler = async () => {
-    // await toast.promise(createPostMutation.mutateAsync(input), {
-    //   loading: <span className="animate-pulse">Posting...</span>,
-    //   success: "Post created successfully",
-    //   error: (error: unknown) => clientErrorHandler(error),
-    // })
+    try {
+      const validatedInput = createPostSchema.parse({ content: input })
 
-    await submitPost(input)
-    editor?.commands.clearContent()
+      await toast.promise(createPostMutation.mutateAsync(validatedInput), {
+        loading: <span className="animate-pulse">Posting...</span>,
+        success: "Post created successfully",
+        error: (error: unknown) => clientErrorHandler(error),
+      })
+
+      editor?.commands.clearContent()
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        toast.error(error?.errors[0]!.message)
+      } else {
+        toast.error("An unexpected error occurred")
+      }
+    }
   }
 
   return (

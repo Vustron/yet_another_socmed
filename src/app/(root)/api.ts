@@ -3,18 +3,18 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next-nprogress-bar"
 
 // actions
-import { submitPost } from "@/app/(root)/actions"
+import { createPost } from "@/app/(root)/actions"
 
 // utils
-import { clientErrorHandler, sanitizer } from "@/lib/utils"
-import { createPostSchema } from "@/lib/validation"
-import DOMPurify from "dompurify"
+import { clientErrorHandler } from "@/lib/utils"
+// import { createPostSchema } from "@/lib/validation"
+// import DOMPurify from "dompurify"
 
 // types
 import type { createPostValues } from "@/lib/validation"
 
 // set purify dom
-const purify = DOMPurify
+// const purify = DOMPurify
 
 /* --------------create post---------------- */
 export const useCreatePost = () => {
@@ -31,16 +31,16 @@ export const useCreatePost = () => {
     // create user function
     mutationFn: async (values: createPostValues) => {
       // set unsanitized data
-      const unsanitizedData = values
+      // const unsanitizedData = values
 
-      // init sanitizer
-      const sanitizedData = sanitizer<typeof createPostSchema._type>(
-        unsanitizedData,
-        createPostSchema,
-        purify,
-      )
+      // // init sanitizer
+      // const sanitizedData = sanitizer<typeof createPostSchema._type>(
+      //   unsanitizedData,
+      //   createPostSchema,
+      //   purify,
+      // )
 
-      await submitPost(sanitizedData)
+      await createPost(values)
     },
 
     // on success redirect to verification page
