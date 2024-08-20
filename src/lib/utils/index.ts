@@ -13,6 +13,15 @@ import type DOMPurify from "dompurify"
 import type { NextRequest } from "next/server"
 import type { z } from "zod"
 
+/* formatRelativeDate */
+export function formatNumber(n: number): string {
+  return Intl.NumberFormat("en-US", {
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(n)
+}
+
+/* formatRelativeDate */
 export function formatRelativeDate(from: Date) {
   // init current date
   const currentDate = new Date()
@@ -28,7 +37,7 @@ export function formatRelativeDate(from: Date) {
   return formatDate(from, "MMM d, yyy")
 }
 
-// Unique Id generator
+/* Unique Id generator */
 export function createUniqueId(
   length: number = 21,
   alphabet: string = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_",
@@ -40,7 +49,7 @@ export function createUniqueId(
   return result
 }
 
-// Construct query string utility
+/* Construct query string utility */
 export function buildQueryString(
   params?: Record<string, string | number | boolean>,
 ): string {
@@ -53,7 +62,7 @@ export function buildQueryString(
     .join("&")}`
 }
 
-// client error handler
+/* client error handler */
 export function clientErrorHandler(error: unknown, isToast?: "isToast") {
   // init error handler
   const { message }: ErrorResponseData = ErrorHandler.handleError(error)
@@ -65,19 +74,19 @@ export function clientErrorHandler(error: unknown, isToast?: "isToast") {
   return message
 }
 
-// placeholder image
+/* placeholder image */
 export const placeholderImage = (str: string) => {
   return `https://placehold.co/400x600/EEE/31343C?font=montserrat&text=${encodeURI(
     str,
   )}`
 }
 
-// parse json data
+/* parse json data */
 export function requestBodyHandler<T>(request: NextRequest): Promise<T> {
   return request.json() as Promise<T>
 }
 
-// check required fields
+/* check required fields */
 export function checkRequiredFields<T>(
   body: T,
   requiredFields: (keyof T)[],
@@ -93,14 +102,14 @@ export function checkRequiredFields<T>(
   return null
 }
 
-// response stringify parser
+/* response stringify parser */
 export const dataSerializer = <T>(data: T): T => {
   // serialize data
   const serializedData = JSON.stringify(data).toString()
   return JSON.parse(serializedData) as T
 }
 
-// data sanitizer
+/* data sanitizer */
 export const sanitizer = <T>(
   data: unknown,
   schema: z.ZodObject<z.ZodRawShape>,
@@ -142,12 +151,12 @@ export const sanitizer = <T>(
   return parsedData.data as T
 }
 
-// class name merger
+/* class name merger */
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-// bytes formatter
+/* bytes formatter */
 export function formatBytes(
   bytes: number,
   opts: {
@@ -166,7 +175,7 @@ export function formatBytes(
   }`
 }
 
-// error class handler
+/* error class handler */
 export class ErrorHandler {
   // init error handler method
   public static handleError(error: unknown): ErrorResponseData {

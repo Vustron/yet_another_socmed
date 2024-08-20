@@ -1,12 +1,18 @@
 // hooks
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query"
 import { useRouter } from "next-nprogress-bar"
 
 // actions
-import { createPost } from "@/app/(root)/actions"
+import { createPost, getPosts } from "@/app/(root)/actions"
 
 // utils
+// import { httpRequest } from "@/lib/config/http"
 import { clientErrorHandler } from "@/lib/utils"
+import { queryOptions } from "@tanstack/react-query"
 // import { createPostSchema } from "@/lib/validation"
 // import DOMPurify from "dompurify"
 
@@ -53,5 +59,22 @@ export const useCreatePost = () => {
 
     // handler error
     onError: (error) => clientErrorHandler(error),
+  })
+}
+
+/* --------------get post ---------------- */
+export const useGetPosts = () => {
+  return useSuspenseQuery({
+    queryKey: ["posts"],
+    queryFn: () => getPosts(),
+  })
+}
+
+/* --------------prefetch post ---------------- */
+export async function preFetchPosts() {
+  // init prefetch query
+  return queryOptions({
+    queryKey: ["posts"],
+    queryFn: () => getPosts(),
   })
 }
