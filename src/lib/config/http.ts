@@ -1,23 +1,18 @@
 // utils
 import { env } from "@/lib/config/env.mjs"
 import { buildQueryString, clientErrorHandler } from "@/lib/utils"
-import ky from "ky"
-
-// types
-import type { Options as KyOptions } from "ky"
 
 // Updated RequestConfig type
 export type RequestConfig<RequestType = any, ResponseType = any> = {
   url?: string
   method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH"
-  params?: Record<string, string | number | boolean | null>
+  params?: Record<string, string | number | boolean>
   headers?: HeadersInit
   body?: RequestType
   transformResponse?: (data: unknown) => ResponseType
   customURL?: string
 }
 
-// http request method
 export async function httpRequest<RequestType = any, ResponseType = any>({
   url,
   method,
@@ -28,32 +23,6 @@ export async function httpRequest<RequestType = any, ResponseType = any>({
   customURL,
 }: RequestConfig<RequestType, ResponseType>): Promise<ResponseType> {
   try {
-    // init ky
-    const kyInstance = ky.create({
-      hooks: {
-        beforeRequest: [
-          (request) => {
-            request.headers.set("Content-Type", "application/json")
-          },
-        ],
-        afterResponse: [
-          (_request, _options, response) => {
-            if (!response.ok) {
-              throw response
-            }
-          },
-        ],
-      },
-      parseJson: (text) => {
-        return JSON.parse(text, (key, value) => {
-          if (key.endsWith("At") && typeof value === "string") {
-            return new Date(value)
-          }
-          return value
-        })
-      },
-    })
-
     // Full URL with query string
     const fullUrl = `${env.NEXT_PUBLIC_APP_URL}/api/v1/${url}${buildQueryString(params)}`
 
@@ -61,34 +30,40 @@ export async function httpRequest<RequestType = any, ResponseType = any>({
     const requestUrl = customURL || fullUrl
 
     // Prepare request options
-    const requestOptions: KyOptions = {
+    const requestOptions: RequestInit = {
       method,
-      headers,
+      headers: {
+        "Content-Type": "application/json",
+        ...headers,
+      },
       cache: "no-store",
     }
 
     // Add body for non-GET requests
     if (method !== "GET" && body) {
-      requestOptions.json = body
+      requestOptions.body = JSON.stringify(body)
     }
 
-    // Perform request using ky
-    const response = await kyInstance(
-      requestUrl,
-      requestOptions,
-    ).json<ResponseType>()
+    // Perform fetch request
+    const response = await fetch(requestUrl, requestOptions)
 
-    // Transform response data if transformer is provided
+    // Check for HTTP errors
+    if (!response.ok) {
+      const errorData = await response.json()
+      return Promise.reject(
+        new Error(errorData.error || "A network error occurred."),
+      )
+    }
+
+    const data = await response.json()
+
+    // Transform response data if transformer is provide  d
     const transformedData: ResponseType = transformResponse
-      ? transformResponse(response)
-      : response
+      ? transformResponse(data)
+      : data
 
     return transformedData
   } catch (error: unknown) {
-    if (error instanceof Response) {
-      const errorData = await error.json()
-      return Promise.reject({ status: error.status, ...errorData })
-    }
     return Promise.reject(clientErrorHandler(error))
   }
 }

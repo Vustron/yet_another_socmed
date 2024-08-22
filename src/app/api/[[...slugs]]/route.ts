@@ -1,4 +1,8 @@
-// post controllers
+// auth controller
+import { loginController } from "@/lib/controllers/auth/login"
+import { registerController } from "@/lib/controllers/auth/register"
+
+// posts controllers
 import { postsForYouController } from "@/lib/controllers/posts/for-you"
 
 // utils
@@ -36,8 +40,12 @@ export async function POST(
 
   switch (pathname) {
     // login account
-    // case "/api/v1/auth/login-account":
-    //   return loginAccountControl(request)
+    case "/api/v1/auth/login-account":
+      return loginController(request)
+
+    // register account
+    case "/api/v1/auth/register-account":
+      return registerController(request)
 
     default:
       return NextResponse.json(

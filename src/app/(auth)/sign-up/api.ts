@@ -26,7 +26,7 @@ export const useCreateAccount = () => {
 
   return useMutation({
     // set mutation key
-    mutationKey: ["create-account"],
+    mutationKey: ["register-account"],
 
     // create user function
     mutationFn: async (values: SignUpValues) => {
@@ -34,7 +34,7 @@ export const useCreateAccount = () => {
       const unsanitizedData = values
 
       // init sanitizer
-      const sanitizedData = sanitizer<typeof signUpSchema._type>(
+      const sanitizedData = sanitizer<SignUpValues>(
         unsanitizedData,
         signUpSchema,
         purify,

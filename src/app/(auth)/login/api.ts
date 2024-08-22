@@ -31,13 +31,19 @@ export const useLoginAccount = () => {
       const unsanitizedData = values
 
       // init sanitizer
-      const sanitizedData = sanitizer<typeof loginSchema._type>(
+      const sanitizedData = sanitizer<LoginValues>(
         unsanitizedData,
         loginSchema,
         purify,
       )
 
       await login(sanitizedData)
+    },
+
+    // on success redirect to verification page
+    onSuccess: () => {
+      router.push("/")
+      router.refresh()
     },
 
     // on success redirect to verification page
