@@ -1,18 +1,21 @@
 "use server"
 
 // configs
+import { httpRequest } from "@/lib/config/http"
 import prisma from "@/lib/config/prisma"
 
 // actions
 import { validateRequest } from "@/lib/config/auth"
 
-// schema
+// utils
+import { unstable_cache } from "next/cache"
+
+// validation
 import { createPostSchema } from "@/lib/validation"
 
 // types
-import { postDataInclude, userDataSelect } from "@/lib/constants"
+import { type PostData, postDataInclude, userDataSelect } from "@/lib/constants"
 import type { createPostValues } from "@/lib/validation"
-import { unstable_cache } from "next/cache"
 
 /* create post */
 export async function createPost(input: createPostValues) {
@@ -88,4 +91,18 @@ export async function getTrendingTopics() {
   )
 
   return await trendingTopics()
+}
+
+/* getForYoufeed */
+export async function getForYouFeed(): Promise<PostData[]> {
+  // set url
+  const URL = "posts/for-you"
+
+  // init http get method to get posts feed for you
+  const data: PostData[] = await httpRequest({
+    url: URL,
+    method: "GET",
+  })
+
+  return data
 }

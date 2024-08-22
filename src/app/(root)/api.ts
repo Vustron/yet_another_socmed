@@ -1,13 +1,9 @@
 // hooks
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next-nprogress-bar"
 
 // actions
-import { createPost, getPosts } from "@/app/(root)/actions"
+import { createPost, getForYouFeed, getPosts } from "@/app/(root)/actions"
 
 // utils
 // import { httpRequest } from "@/lib/config/http"
@@ -17,6 +13,7 @@ import { queryOptions } from "@tanstack/react-query"
 // import DOMPurify from "dompurify"
 
 // types
+import type { PostData } from "@/lib/constants"
 import type { createPostValues } from "@/lib/validation"
 
 // set purify dom
@@ -64,7 +61,7 @@ export const useCreatePost = () => {
 
 /* --------------get post ---------------- */
 export const useGetPosts = () => {
-  return useSuspenseQuery({
+  return useQuery({
     queryKey: ["posts"],
     queryFn: () => getPosts(),
   })
@@ -76,5 +73,22 @@ export async function preFetchPosts() {
   return queryOptions({
     queryKey: ["posts"],
     queryFn: () => getPosts(),
+  })
+}
+
+/* --------------get for you feed---------------- */
+export const useGetForYouFeed = () => {
+  return useQuery<PostData[]>({
+    queryKey: ["post-feed", "for-you"],
+    queryFn: () => getForYouFeed(),
+  })
+}
+
+/* --------------prefetch get for you feed ---------------- */
+export async function preFetchGetForYouFeed() {
+  // init prefetch query
+  return queryOptions({
+    queryKey: ["post-feed", "for-you"],
+    queryFn: () => getForYouFeed(),
   })
 }

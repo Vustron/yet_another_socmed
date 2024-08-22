@@ -1,5 +1,7 @@
-// actions
-import { preFetchPosts } from "@/app/(root)/api"
+"use server"
+
+// api
+import { preFetchGetForYouFeed, preFetchPosts } from "@/app/(root)/api"
 
 // utils
 import {
@@ -20,6 +22,12 @@ const HydrationBoundaryWrapper = ({
   void queryClient.prefetchQuery({
     queryKey: ["posts"],
     queryFn: async () => preFetchPosts(),
+  })
+
+  // prefetched posts
+  void queryClient.prefetchQuery({
+    queryKey: ["post-feed", "for-you"],
+    queryFn: () => preFetchGetForYouFeed(),
   })
 
   return (

@@ -1,5 +1,5 @@
-// account controllers
-import { helloController } from "@/lib/controllers/hello"
+// post controllers
+import { postsForYouController } from "@/lib/controllers/posts/for-you"
 
 // utils
 import { NextResponse } from "next/server"
@@ -16,8 +16,8 @@ export async function GET(
 
   switch (pathname) {
     // get accounts
-    case "/api/v1/hello":
-      return helloController()
+    case "/api/v1/posts/for-you":
+      return postsForYouController()
 
     default:
       return NextResponse.json(

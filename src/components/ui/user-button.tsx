@@ -18,6 +18,7 @@ import { Check, LogOutIcon, Monitor, Moon, Sun, UserIcon } from "lucide-react"
 
 // hooks
 import { useSession } from "@/components/providers/session"
+import { useQueryClient } from "@tanstack/react-query"
 import { useTheme } from "next-themes"
 
 // actions
@@ -38,8 +39,12 @@ const UserButton = ({ className }: UserButtonProps) => {
   // theme state
   const { setTheme, theme } = useTheme()
 
+  // get query client
+  const queryClient = useQueryClient()
+
   // logout handler
   const handleLogout = async () => {
+    queryClient.clear()
     await toast.promise(logout(), {
       loading: <span className="animate-pulse">Logging out...</span>,
       success: "Logout successful",
