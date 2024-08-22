@@ -14,7 +14,11 @@ import { unstable_cache } from "next/cache"
 import { createPostSchema } from "@/lib/validation"
 
 // types
-import { type PostData, postDataInclude, userDataSelect } from "@/lib/constants"
+import {
+  type PostsPage,
+  postDataInclude,
+  userDataSelect,
+} from "@/lib/types/prisma-types"
 import type { createPostValues } from "@/lib/validation"
 
 /* create post */
@@ -94,14 +98,19 @@ export async function getTrendingTopics() {
 }
 
 /* getForYoufeed */
-export async function getForYouFeed(): Promise<PostData[]> {
+export async function getForYouFeed(
+  pageParam: string | null,
+): Promise<PostsPage> {
   // set url
   const URL = "posts/for-you"
 
   // init http get method to get posts feed for you
-  const data: PostData[] = await httpRequest({
+  const data: PostsPage = await httpRequest({
     url: URL,
     method: "GET",
+    params: {
+      cursor: pageParam,
+    },
   })
 
   return data

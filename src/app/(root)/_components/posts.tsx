@@ -3,7 +3,7 @@ import UserAvatar from "@/components/ui/user-avatar"
 import Link from "next/link"
 
 // types
-import type { PostData } from "@/lib/constants"
+import type { PostData } from "@/lib/types/prisma-types"
 import { formatRelativeDate } from "@/lib/utils"
 
 interface PostsProps {
@@ -33,7 +33,7 @@ const Posts = ({ post }: PostsProps) => {
               href={`/posts/${post.id}`}
               className="block text-sm text-muted-foreground hover:underline"
             >
-              {/* {formatRelativeDate(post.createdAt)} */}
+              {formatRelativeDate(post.createdAt)}
             </Link>
           </div>
         </div>

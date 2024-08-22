@@ -25,8 +25,9 @@ const HydrationBoundaryWrapper = ({
   })
 
   // prefetched posts
-  void queryClient.prefetchQuery({
+  void queryClient.prefetchInfiniteQuery({
     queryKey: ["post-feed", "for-you"],
+    initialPageParam: null as unknown as string,
     queryFn: () => preFetchGetForYouFeed(),
   })
 

@@ -17,7 +17,7 @@ export async function GET(
   switch (pathname) {
     // get accounts
     case "/api/v1/posts/for-you":
-      return postsForYouController()
+      return postsForYouController(request)
 
     default:
       return NextResponse.json(

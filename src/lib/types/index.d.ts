@@ -1,6 +1,6 @@
 // types
 import type { IncomingMessage } from "node:http"
-import type { PostData } from "@/lib/constants"
+import type { PostData } from "@/lib/types/prisma-types"
 import type { Post, Prisma } from "@prisma/client"
 import type { Session, User } from "lucia"
 import type { Metadata, Viewport } from "next"
@@ -85,6 +85,12 @@ export interface MenuBarProps {
 /* PostsProps Type */
 export interface PostsProps {
   post: Post
+}
+
+/* InfiniteScrollContainerProps Type */
+export interface InfiniteScrollContainerProps extends React.PropsWithChildren {
+  onBottomReached: () => void
+  className?: string
 }
 
 /* --------------Auth Types---------------- */

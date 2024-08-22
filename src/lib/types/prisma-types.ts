@@ -22,3 +22,9 @@ export const postDataInclude = {
 export type PostData = Prisma.PostGetPayload<{
   include: typeof postDataInclude
 }>
+
+/* PostsPage Type */
+export interface PostsPage {
+  posts: PostData[]
+  nextCursor: string | null | undefined
+}

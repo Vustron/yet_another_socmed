@@ -51,15 +51,19 @@ export function createUniqueId(
 
 /* Construct query string utility */
 export function buildQueryString(
-  params?: Record<string, string | number | boolean>,
+  params?: Record<string, string | number | boolean | null>,
 ): string {
   if (!params) return ""
-  return `?${Object.entries(params)
+
+  const queryParams = Object.entries(params)
+    .filter(([_, value]) => value !== null && value !== undefined)
     .map(
       ([key, value]) =>
-        `${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
+        `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`,
     )
-    .join("&")}`
+    .join("&")
+
+  return queryParams ? `?${queryParams}` : ""
 }
 
 /* client error handler */

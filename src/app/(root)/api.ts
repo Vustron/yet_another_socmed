@@ -1,5 +1,10 @@
 // hooks
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query"
 import { useRouter } from "next-nprogress-bar"
 
 // actions
@@ -13,7 +18,6 @@ import { queryOptions } from "@tanstack/react-query"
 // import DOMPurify from "dompurify"
 
 // types
-import type { PostData } from "@/lib/constants"
 import type { createPostValues } from "@/lib/validation"
 
 // set purify dom
@@ -49,7 +53,10 @@ export const useCreatePost = () => {
     // on success redirect to verification page
     onSettled: () => {
       // Always refetch after error or success:
-      void queryClient.invalidateQueries({ queryKey: ["accounts"] })
+      void queryClient.invalidateQueries({ queryKey: ["posts"] })
+
+      // Always refetch after error or success:
+      void queryClient.invalidateQueries({ queryKey: ["post-feed", "for-you"] })
 
       router.refresh()
     },
@@ -78,10 +85,28 @@ export async function preFetchPosts() {
 
 /* --------------get for you feed---------------- */
 export const useGetForYouFeed = () => {
-  return useQuery<PostData[]>({
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    status,
+  } = useInfiniteQuery({
     queryKey: ["post-feed", "for-you"],
-    queryFn: () => getForYouFeed(),
+    queryFn: ({ pageParam }) => getForYouFeed(pageParam),
+    initialPageParam: null as unknown as string,
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
   })
+
+  return {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    status,
+  }
 }
 
 /* --------------prefetch get for you feed ---------------- */
@@ -89,6 +114,6 @@ export async function preFetchGetForYouFeed() {
   // init prefetch query
   return queryOptions({
     queryKey: ["post-feed", "for-you"],
-    queryFn: () => getForYouFeed(),
+    queryFn: () => getForYouFeed(null),
   })
 }
