@@ -3,13 +3,13 @@ import LoginForm from "@/app/(auth)/login/_components/login-form"
 
 // utils
 import Image from "next/image"
+import Link from "next/link"
 
 // assets
 import loginImage from "@/assets/images/login-image.jpg"
 
 // types
 import type { Metadata } from "next"
-import Link from "next/link"
 
 // meta data
 export const metadata: Metadata = {

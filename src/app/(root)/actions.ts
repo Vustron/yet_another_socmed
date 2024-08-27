@@ -30,16 +30,24 @@ export async function createPost(input: createPostValues) {
 
   const { content } = createPostSchema.parse(input)
 
-  await prisma.post.create({
+  const newPost = await prisma.post.create({
     data: {
       content,
       userId: user.id,
     },
+    include: postDataInclude,
   })
+
+  return newPost
 }
 
 /* get posts */
 export async function getPosts() {
+  // request validation
+  const { user } = await validateRequest()
+
+  if (!user) throw Error("Unauthorized")
+
   return await prisma.post.findMany({
     include: postDataInclude,
     orderBy: {
@@ -70,6 +78,11 @@ export async function whoToFollow() {
 
 /* getTrendingTopics */
 export async function getTrendingTopics() {
+  // request validation
+  const { user } = await validateRequest()
+
+  if (!user) throw Error("Unauthorized")
+
   // init get topics
   const trendingTopics = unstable_cache(
     async () => {
@@ -99,8 +112,13 @@ export async function getTrendingTopics() {
 
 /* getForYoufeed */
 export async function getForYouFeed(
-  pageParam: string | null,
+  pageParam?: string | number | boolean,
 ): Promise<PostsPage> {
+  // request validation
+  const { user } = await validateRequest()
+
+  if (!user) throw Error("Unauthorized")
+
   // set url
   const URL = "posts/for-you"
 
@@ -109,9 +127,30 @@ export async function getForYouFeed(
     url: URL,
     method: "GET",
     params: {
-      cursor: pageParam,
+      cursor: pageParam!,
     },
   })
 
   return data
+}
+
+/* deletePost */
+export async function deletePost(id: string) {
+  // request validation
+  const { user } = await validateRequest()
+
+  if (!user) throw new Error("Unauthorized")
+
+  // set url
+  const URL = "posts/delete"
+
+  const deletePost = await httpRequest({
+    url: URL,
+    method: "DELETE",
+    params: {
+      id,
+      userId: user.id,
+    },
+  })
+  return deletePost
 }

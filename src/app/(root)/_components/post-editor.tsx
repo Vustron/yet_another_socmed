@@ -1,8 +1,9 @@
 "use client"
 
 // components
-import { Button } from "@/components/ui/button"
+import SubmitButton from "@/components/shared/submit-button"
 import UserAvatar from "@/components/ui/user-avatar"
+import { SendHorizonal } from "lucide-react"
 
 // hooks
 import { useCreatePost } from "@/app/(root)/api"
@@ -77,13 +78,14 @@ const PostEditor = () => {
         />
       </div>
       <div className="flex justify-end">
-        <Button
+        <SubmitButton
           onClick={submitHandler}
           disabled={createPostMutation.isPending}
-          className="min-w-20"
-        >
-          Post
-        </Button>
+          buttonClassName="min-w-20"
+          title="Post"
+          position="right"
+          icon={<SendHorizonal className="ml-2 size-4" />}
+        />
       </div>
     </div>
   )

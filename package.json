@@ -15,7 +15,8 @@
     "generate": "bunx prisma generate --schema ./src/prisma/schema.prisma",
     "push": "bunx prisma db push --schema ./src/prisma/schema.prisma",
     "studio": "bunx prisma studio --schema ./src/prisma/schema.prisma",
-    "migrate": "bunx prisma migrate dev --schema ./src/prisma/schema.prisma"
+    "migrate": "bunx prisma migrate dev --schema ./src/prisma/schema.prisma",
+    "prepare": "husky"
   },
   "dependencies": {
     "@hookform/resolvers": "3.9.0",
@@ -85,6 +86,7 @@
     "@types/request-ip": "0.0.41",
     "autoprefixer": "10.4.20",
     "cross-env": "7.0.3",
+    "husky": "^9.1.5",
     "postcss": "8.4.41",
     "tailwindcss": "3.4.10",
     "turbo": "2.0.14",

@@ -1,3 +1,5 @@
+"use client"
+
 // hooks
 import {
   useInfiniteQuery,
@@ -5,23 +7,33 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query"
+
+// hooks
 import { useRouter } from "next-nprogress-bar"
+import { usePathname } from "next/navigation"
 
 // actions
-import { createPost, getForYouFeed, getPosts } from "@/app/(root)/actions"
+import {
+  createPost,
+  deletePost,
+  getForYouFeed,
+  getPosts,
+} from "@/app/(root)/actions"
 
 // utils
 // import { httpRequest } from "@/lib/config/http"
-import { clientErrorHandler } from "@/lib/utils"
+import { clientErrorHandler, sanitizer } from "@/lib/utils"
+import { createPostSchema } from "@/lib/validation"
 import { queryOptions } from "@tanstack/react-query"
-// import { createPostSchema } from "@/lib/validation"
-// import DOMPurify from "dompurify"
+import DOMPurify from "dompurify"
 
 // types
+import type { PostsPage } from "@/lib/types/prisma-types"
 import type { createPostValues } from "@/lib/validation"
+import type { InfiniteData, QueryFilters } from "@tanstack/react-query"
 
 // set purify dom
-// const purify = DOMPurify
+const purify = DOMPurify
 
 /* --------------create post---------------- */
 export const useCreatePost = () => {
@@ -38,25 +50,53 @@ export const useCreatePost = () => {
     // create user function
     mutationFn: async (values: createPostValues) => {
       // set unsanitized data
-      // const unsanitizedData = values
+      const unsanitizedData = values
 
-      // // init sanitizer
-      // const sanitizedData = sanitizer<typeof createPostSchema._type>(
-      //   unsanitizedData,
-      //   createPostSchema,
-      //   purify,
-      // )
+      // init sanitizer
+      const sanitizedData = sanitizer<createPostValues>(
+        unsanitizedData,
+        createPostSchema,
+        purify,
+      )
 
-      await createPost(values)
+      return await createPost(sanitizedData)
+    },
+
+    onSuccess: async (newPost) => {
+      const queryFilter: QueryFilters = {
+        queryKey: ["post-feed", "for-you"],
+      }
+
+      await queryClient.cancelQueries(queryFilter)
+
+      queryClient.setQueriesData<InfiniteData<PostsPage, string | null>>(
+        queryFilter,
+        (oldData) => {
+          const firstPage = oldData?.pages[0]
+
+          if (firstPage) {
+            return {
+              pageParams: oldData.pageParams,
+              pages: [
+                {
+                  posts: [newPost, ...firstPage.posts],
+                  nextCursor: firstPage.nextCursor,
+                },
+                ...oldData.pages.slice(1),
+              ],
+            }
+          }
+        },
+      )
     },
 
     // on success redirect to verification page
     onSettled: () => {
-      // Always refetch after error or success:
-      void queryClient.invalidateQueries({ queryKey: ["posts"] })
+      // // Always refetch after error or success:
+      // void queryClient.invalidateQueries({ queryKey: ["posts"] })
 
-      // Always refetch after error or success:
-      void queryClient.invalidateQueries({ queryKey: ["post-feed", "for-you"] })
+      // // Always refetch after error or success:
+      // void queryClient.invalidateQueries({ queryKey: ["post-feed", "for-you"] })
 
       router.refresh()
     },
@@ -114,6 +154,58 @@ export async function preFetchGetForYouFeed() {
   // init prefetch query
   return queryOptions({
     queryKey: ["post-feed", "for-you"],
-    queryFn: () => getForYouFeed(null),
+    queryFn: () => getForYouFeed(),
+  })
+}
+
+/* -------------- delete post ---------------- */
+export const useDeletePost = (id: string) => {
+  const router = useRouter()
+  const pathName = usePathname()
+
+  // init query client
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    // set mutation key
+    mutationKey: ["delete-post", id],
+
+    // delete user function
+    mutationFn: async () => {
+      return await deletePost(id)
+    },
+
+    // error handler
+    onError: (error) => clientErrorHandler(error),
+
+    onSuccess: async (deletePost) => {
+      const queryFilters: QueryFilters = {
+        queryKey: ["post-feed"],
+      }
+
+      await queryClient.cancelQueries(queryFilters)
+      queryClient.setQueriesData<InfiniteData<PostsPage, string | null>>(
+        queryFilters,
+        (oldData) => {
+          if (!oldData) return
+
+          return {
+            pageParams: oldData.pageParams,
+            pages: oldData.pages.map((page) => ({
+              nextCursor: page.nextCursor,
+              posts: page.posts.filter((p) => p.id !== deletePost.id),
+            })),
+          }
+        },
+      )
+    },
+
+    // on success redirect to verification page
+    onSettled: (deletePost) => {
+      if (pathName === `/posts/${deletePost.id}`) {
+        router.push(`/users/${deletePost.user.username}`)
+      }
+      router.refresh()
+    },
   })
 }
